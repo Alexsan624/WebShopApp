@@ -88,20 +88,20 @@ namespace WebShopApp.Infrastructure.Data.Infrastructure
 
         private static void SeedBrands(ApplicationDbContext dataBrand)
         {
-            if (dataBrand.Categories.Any())
+            if (dataBrand.Brands.Any())
             {
                 return;
             }
-            dataBrand.Categories.AddRange(new[]
+            dataBrand.Brands.AddRange(new[]
             {
-                new Category{CategoryName="Aser"},
-                new Category{CategoryName="Asus"},
-                new Category{CategoryName="Apple"},
-                new Category{CategoryName="Dell"},
-                new Category{CategoryName="HP"},
-                new Category{CategoryName="Huawei"},
-                new Category{CategoryName="Lenovo"},
-                new Category{CategoryName="Samsung"},
+                new Brand{BrandName="Aser"},
+                new Brand{BrandName="Asus"},
+                new Brand{BrandName="Apple"},
+                new Brand{BrandName="Dell"},
+                new Brand{BrandName="HP"},
+                new Brand{BrandName="Huawei"},
+                new Brand{BrandName="Lenovo"},
+                new Brand{BrandName="Samsung"},
             });
             dataBrand.SaveChanges();
         }
