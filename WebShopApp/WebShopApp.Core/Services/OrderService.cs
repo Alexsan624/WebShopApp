@@ -14,7 +14,7 @@ namespace WebShopApp.Core.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IProductService _productService;
-        
+
         public OrderService(ApplicationDbContext context, IProductService productService)
         {
             _context = context;
@@ -28,25 +28,43 @@ namespace WebShopApp.Core.Services
             {
                 return false;
             }
-            Order item = new Order
+            Order item = new Order()
             {
                 OrderDate = DateTime.Now,
                 ProductId = productId,
                 UserId = userId,
                 Quantity = quantity,
                 Price = product.Price,
-                Discount = product.Discount,
+                Discount = product.Discount
             };
-
             product.Quantity -= quantity;
-
             this._context.Products.Update(product);
-            this._context.Add(item);
-
+            this._context.Orders.Add(item);
             return _context.SaveChanges() != 0;
         }
 
+        public Order GetOrderById(int orderId)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Order> GetOrders()
+        {
+            return _context.Orders.OrderByDescending(x => x.OrderDate).ToList();
+        }
+
+        public List<Order> GetOrdersByUser(string userId)
+        {
+            return _context.Orders.Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.OrderDate).ToList();
+        }
+
+        public bool RemoveById(int orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(int orderId, int productId, string userId, int quantity)
         {
             throw new NotImplementedException();
         }

@@ -11,6 +11,7 @@ using WebShopApp.Models.Order;
 
 namespace WebShopApp.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IProductService _productService;
@@ -22,12 +23,30 @@ namespace WebShopApp.Controllers
             _orderService = orderService;
         }
 
-
-        // GET: OrderController
+        //// GET: OrderController
         [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
-            List<OrderIndexVM> orders = _orderService.GetOrders()
+            List<OrderIndexVM> orders = _orderService.GetOrders().Select(x => new OrderIndexVM
+            {
+                Id = x.Id,
+                OrderDate = x.OrderDate.ToString("dd-MMM-yyyy hh:mm", CultureInfo.InvariantCulture),
+                UserId = x.UserId,
+                User = x.User.UserName,
+                ProductId = x.ProductId,
+                Product = x.Product.ProductName,
+                Picture = x.Product.Picture,
+                Quantity = x.Quantity,
+                Price = x.Price,
+                Discount = x.Discount,
+                TotalPrice = x.TotalPrice,
+            }).ToList();
+            return View(orders);
+        }
+        public ActionResult MyOrders()
+        {
+            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<OrderIndexVM> orders = _orderService.GetOrdersByUser(currentUserId)
                 .Select(x => new OrderIndexVM
                 {
                     Id = x.Id,
@@ -45,16 +64,11 @@ namespace WebShopApp.Controllers
             return View(orders);
         }
 
-        public IActionResult Denied()
-        {
-            return View();
-        }
-
         // GET: OrderController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        //public ActionResult Details(int id)
+        //{
+        //    return View();
+        //}
 
         // GET: OrderController/Create
         public ActionResult Create(int id)
@@ -83,7 +97,8 @@ namespace WebShopApp.Controllers
         {
             string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var product = this._productService.GetProductById(bindingModel.ProductId);
-            if (currentUserId == null || product == null || product.Quantity < bindingModel.Quantity || product.Quantity == 0)
+            if (currentUserId == null || product == null || product.Quantity < bindingModel.Quantity ||
+                product.Quantity == 0)
             {
                 return RedirectToAction("Denied", "Order");
             }
@@ -93,47 +108,51 @@ namespace WebShopApp.Controllers
             }
             return this.RedirectToAction("Index", "Product");
         }
+        public ActionResult Denied()
+        {
+            return View();
+        }
 
         // GET: OrderController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
 
         // POST: OrderController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         // GET: OrderController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
         // POST: OrderController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }
