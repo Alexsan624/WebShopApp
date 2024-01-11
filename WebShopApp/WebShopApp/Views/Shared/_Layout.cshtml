@@ -31,10 +31,15 @@
                                 Products
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index">All</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-searchStringBrandName = "Aser">Aser</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-searchStringBrandName="Asus">Asus</a></li>
+                            </ul>
+                            @*<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                                 <li><a class="dropdown-item" href="/Product/Index">All</a></li>
                                 <li><a class="dropdown-item" href="/Product?SearchStringBrandName=Aser">Aser</a></li>
                                 <li><a class="dropdown-item" href="/Product?SearchStringBrandName=Asus">Asus</a></li>
-                            </ul>
+                            </ul>*@
                         </li>
                         @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
